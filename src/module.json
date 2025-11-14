@@ -1,0 +1,32 @@
+{
+    "id": "fvtt-ready-check",
+    "title": "Ready Check",
+    "description": "A simple ready check module for FoundryVTT.",
+    "version": "CI_COMMIT_TAG",
+    "authors": [
+        {
+            "name": "cclloyd"
+        }
+    ],
+    "esmodules": ["module/fvtt-ready-check.js"],
+    "styles": ["styles/fvtt-ready-check.css"],
+    "packs": [],
+    "compatibility": {
+        "minimum": "13",
+        "verified": "13.350"
+    },
+    "relationships": {},
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "lang/en.json"
+        }
+    ],
+    "socket": true,
+    "url": "https://gitlab.com/cclloyd1/fvtt-ready-check",
+    "manifest": "https://gitlab.com/api/v4/projects/29080072/packages/generic/permalink/latest/module.json",
+    "download": "https://gitlab.com/api/v4/projects/29080072/packages/generic/permalink/CI_COMMIT_TAG/fvtt-ready-check.zip",
+    "license": "MIT",
+    "library": false
+}

@@ -1,0 +1,72 @@
+{
+    "private": true,
+    "name": "fvtt-ready-check",
+    "version": "1.2.2",
+    "description": "",
+    "license": "",
+    "homepage": "",
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "bugs": {
+        "url": ""
+    },
+    "contributors": [
+        {
+            "name": "",
+            "email": ""
+        }
+    ],
+    "scripts": {
+        "build": "gulp build",
+        "dev": "gulp dev",
+        "clean": "rimraf dist"
+    },
+    "devDependencies": {
+        "@esbuild-plugins/tsconfig-paths": "^0.1.2",
+        "@rollup/plugin-node-resolve": "^16.0.3",
+        "@typescript-eslint/eslint-plugin": "^8.46.4",
+        "@typescript-eslint/parser": "^8.46.4",
+        "@typhonjs-fvtt/eslint-config-foundry.js": "^0.8.0",
+        "chalk": "^5.6.2",
+        "dayjs": "^1.11.19",
+        "esbuild": "^0.27.0",
+        "eslint": "^9.39.1",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.4",
+        "execa": "^9.6.0",
+        "fs-extra": "^11.3.2",
+        "fvtt-types": "^13.346.0-beta.20250812191140",
+        "gulp": "^5.0.1",
+        "gulp-clean": "^0.4.0",
+        "gulp-dart-sass": "^1.1.0",
+        "gulp-esbuild": "^0.14.1",
+        "gulp-newer": "^1.4.0",
+        "gulp-plumber": "^1.2.1",
+        "gulp-sass": "^6.0.1",
+        "gulp-sourcemaps": "^3.0.0",
+        "gulp-typescript": "^6.0.0-alpha.1",
+        "husky": "^9.1.7",
+        "lint-staged": "^16.2.6",
+        "prettier": "^3.6.2",
+        "rimraf": "^6.1.0",
+        "rollup": "^4.53.2",
+        "sass": "^1.94.0",
+        "semver": "^7.7.3",
+        "through2": "^4.0.2",
+        "tsc-alias": "^1.8.16",
+        "typescript": "^5.9.3",
+        "typescript-transform-paths": "^3.5.5",
+        "yargs": "^18.0.0",
+        "yarn-upgrade-all": "^0.7.5"
+    },
+    "lint-staged": {
+        "*.(js)": "eslint --fix",
+        "*.(json|scss)": "prettier --write"
+    },
+    "dependencies": {},
+    "imports": {
+        "#ke/*": "./src/*"
+    }
+}

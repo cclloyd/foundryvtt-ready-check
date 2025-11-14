@@ -1,0 +1,14 @@
+.fvttrc-app {
+    .form-group {
+        display: flex;
+        gap: 1rem;
+        .form-fields {
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+
+#create-ready-check {
+    color: red !important;
+}

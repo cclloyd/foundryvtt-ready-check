@@ -1,0 +1,38 @@
+{
+    "compilerOptions": {
+        "types": ["fvtt-types"],
+        "target": "esnext",
+        "moduleResolution": "bundler",
+        "strict": true,
+
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "skipLibCheck": true,
+        "verbatimModuleSyntax": true,
+        "moduleDetection": "force",
+
+        "rootDir": "src",
+        "outDir": "dist",
+        "sourceMap": true,
+        "noEmit": false,
+        "declaration": false,
+
+        // Linting via ESLint/IDE instead of tsc errors:
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+
+        "erasableSyntaxOnly": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedSideEffectImports": true,
+
+        // Relative imports
+        "baseUrl": ".",
+        "paths": {
+            "#ccrc/*": ["src/*"]
+        },
+
+        "plugins": [{ "transform": "typescript-transform-paths" }, { "transform": "typescript-transform-paths", "afterDeclarations": true }]
+    },
+    "include": ["src/**/*", "src/**/*.d.ts", "fvtt-ready-check.d.ts"]
+}
