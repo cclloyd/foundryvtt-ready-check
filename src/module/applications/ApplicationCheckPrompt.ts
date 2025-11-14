@@ -15,6 +15,12 @@ export class ApplicationCheckPrompt extends HandlebarsApplicationMixin(Applicati
         },
     };
 
+    // TODO: Cleanup
+    // TODO: Fix styles
+    // TODO: Ensure when a user joins the state updates properly for new and joining user
+    // TODO: Add any game options
+    // TODO: Try to get state to persist for GM across refreshes
+
     /** @inheritDoc */
     static DEFAULT_OPTIONS = {
         id: useNamespace('prompt'),
