@@ -60,6 +60,9 @@ export class RCManager {
             case 'UNREADY':
                 game.readyCheck.handleMarkUnready(payload);
                 break;
+            case 'END':
+                game.readyCheck.handleEnd(payload);
+                break;
             default:
                 throw new Error('unknown type');
         }
@@ -83,6 +86,10 @@ export class RCManager {
             game.scenes!.active!.unsetFlag(ns, 'readyCheckStatus');
         }
         this.active = false;
+        this.previousStarted = this.timeStarted = undefined;
+        this.previousFormData = this.formData = undefined;
+        this.previousRound = this.roundStarted = undefined;
+        this.previousCombat = this.isCombat = false;
         game.users!.forEach((player) => {
             const elem = $(`#players-active i[data-user-id="${player.id}"]`);
             if (elem.length === 0) return;
@@ -105,9 +112,12 @@ export class RCManager {
         const { save } = options ?? {};
 
         game.users!.forEach((player) => {
-            if (player.isGM) return;
-            newStatus[player.id] = false;
             const elem = $(`#players-active i[data-user-id="${player.id}"]`);
+            if (player.isGM && !formData['include-gms']) {
+                elem.removeClass('ccrc-ready fa-check fa-xmark ccrc-notready fa-xmark');
+                return;
+            }
+            newStatus[player.id] = false;
             elem.removeClass('ccrc-ready fa-check fa-xmark').addClass('ccrc-notready fa-xmark');
         });
         if (save && game.user!.isActiveGM) {
@@ -143,6 +153,7 @@ export class RCManager {
         }
         const userElem = $(`#players-active i[data-user-id="${game.user!._id}"]`);
         if (formData['show-prompt'] && userElem.length > 0) {
+            if (game.user!.isGM && !formData['include-gms']) return;
             const userPrompt = new ApplicationCheckPrompt();
             userPrompt.render({ force: true });
         } else {

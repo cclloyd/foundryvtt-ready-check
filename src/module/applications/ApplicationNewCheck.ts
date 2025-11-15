@@ -80,10 +80,11 @@ export class ApplicationNewCheck extends HandlebarsApplicationMixin(ApplicationV
             combat: game.combat,
             previous: previous?.toLocaleTimeString('en-US', { hour12: false }),
             difference: this.formatDifference(difference),
+            rc: game.readyCheck,
             roundStarted: game.readyCheck.roundStarted,
             formData: game.readyCheck.formData,
             trackRounds: game.readyCheck.formData?.['track-rounds'] ? 'checked' : '',
-            rc: game.readyCheck,
+            includeGMs: game.readyCheck.formData?.['include-gms'] ? 'checked' : '',
         } as unknown as Promise<foundry.applications.api.ApplicationV2.RenderContext>;
     }
 }

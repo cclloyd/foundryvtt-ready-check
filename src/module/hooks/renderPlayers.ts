@@ -14,7 +14,6 @@ export const renderPlayers = (app: any, html: HTMLElement, data: any) => {
         const $li = (window as any).$(li);
         const userId = $li.data('userId');
         if (!userId) return;
-        if (game.users!.get(userId)!.isGM) return;
         const icon = document.createElement('i');
         icon.classList.add('ccrc-readycheck', 'fa-solid', 'fas');
         icon.dataset.userId = userId;
