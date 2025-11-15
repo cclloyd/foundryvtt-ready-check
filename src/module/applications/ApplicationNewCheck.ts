@@ -1,6 +1,5 @@
 import { baseClass, ns } from '#ccrc/module/lib/config';
 import { localize, useNamespace } from '#ccrc/module/lib/util';
-import { modLogger } from '#ccrc/module/lib/logger';
 
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 
@@ -26,7 +25,7 @@ export class ApplicationNewCheck extends HandlebarsApplicationMixin(ApplicationV
             closeOnSubmit: true,
         },
         window: {
-            icon: 'fas fa-check-double',
+            icon: 'fas fa-list-check',
             title: 'New Ready Check',
             contentClasses: [baseClass],
             resizable: false,
@@ -34,6 +33,7 @@ export class ApplicationNewCheck extends HandlebarsApplicationMixin(ApplicationV
         },
         actions: {
             closeApp: this.prototype.closeApp,
+            endCheck: this.prototype.endCheck,
         },
     } as foundry.applications.api.ApplicationV2.DefaultOptions;
 
@@ -41,6 +41,12 @@ export class ApplicationNewCheck extends HandlebarsApplicationMixin(ApplicationV
         event.preventDefault();
         const formData = rawFormData.object as Record<string, string>;
         game.readyCheck.start(formData);
+    }
+
+    async endCheck(event: Event, form: any, rawFormData: FormDataExtended) {
+        event.preventDefault();
+        game.readyCheck.end();
+        this.close();
     }
 
     closeApp(event: Event) {
@@ -77,6 +83,7 @@ export class ApplicationNewCheck extends HandlebarsApplicationMixin(ApplicationV
             roundStarted: game.readyCheck.roundStarted,
             formData: game.readyCheck.formData,
             trackRounds: game.readyCheck.formData?.['track-rounds'] ? 'checked' : '',
+            rc: game.readyCheck,
         } as unknown as Promise<foundry.applications.api.ApplicationV2.RenderContext>;
     }
 }

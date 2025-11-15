@@ -1,9 +1,25 @@
-export {};
+// src/module/types/fvtt-ready-check.d.ts
+import type { RCManager } from '#ccrc/module/lib/manager';
 
 declare global {
-    import type { RCManager } from '#ccrc/module/lib/manager';
+    // Extend each game phase in fvtt-types
+    interface UninitializedGame {
+        readyCheck: RCManager;
+    }
 
-    interface Game {
+    interface InitGame {
+        readyCheck: RCManager;
+    }
+
+    interface I18nInitGame {
+        readyCheck: RCManager;
+    }
+
+    interface SetupGame {
+        readyCheck: RCManager;
+    }
+
+    interface ReadyGame {
         readyCheck: RCManager;
     }
 
@@ -23,3 +39,5 @@ declare global {
         register(namespace: 'fvtt-ready-check', key: string, data: any): void;
     }
 }
+
+export {};

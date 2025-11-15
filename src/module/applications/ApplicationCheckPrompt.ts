@@ -15,11 +15,7 @@ export class ApplicationCheckPrompt extends HandlebarsApplicationMixin(Applicati
         },
     };
 
-    // TODO: Cleanup
-    // TODO: Fix styles
-    // TODO: Ensure when a user joins the state updates properly for new and joining user
-    // TODO: Add any game options
-    // TODO: Try to get state to persist for GM across refreshes
+    // TODO: Ensure when a user joins the state updates properly for new and joining user (currently, I think that if they have nothing set, itll mark them as not ready (unsaved) if one is active)
 
     /** @inheritDoc */
     static DEFAULT_OPTIONS = {

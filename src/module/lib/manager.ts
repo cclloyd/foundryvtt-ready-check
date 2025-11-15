@@ -5,10 +5,12 @@ import { ApplicationNewCheck } from '#ccrc/module/applications/ApplicationNewChe
 
 interface StartOptions {
     notify?: boolean;
+    save?: boolean;
 }
 
 export class RCManager {
     identifier = `module.${ns}`;
+    active = false;
     initialized = false;
     timeStarted?: Date;
     formData: any;
@@ -25,6 +27,15 @@ export class RCManager {
 
     init() {
         this.registerSocketHandlers();
+        // Update local cache from saved state
+        this.active = game.scenes!.active?.getFlag(ns, 'readyCheck') === true;
+        if (this.active) {
+            game.users!.forEach((user) => {
+                const isReady = game.scenes!.active!.getFlag(ns, `readyCheckStatus.${user.id}`) === true;
+                if (isReady) this.handleMarkReady({ userId: user.id, save: false });
+                else this.handleMarkUnready({ userId: user.id, save: false });
+            });
+        }
         this.initialized = true;
     }
 
@@ -54,7 +65,36 @@ export class RCManager {
         }
     }
 
-    start(formData: any = {}, options: StartOptions = {}) {
+    end(noSave = false) {
+        if (!game.scenes!.active) {
+            ui.notifications!.error('No active scene found. Ensure a scene is active and try again.');
+            return;
+        }
+        this.emit('END', {});
+        this.handleEnd({ noSave });
+    }
+
+    handleEnd(payload: any = { noSave: false }) {
+        const { noSave } = payload;
+
+        // Only save from active GM session
+        if (!noSave && game.user!.isActiveGM) {
+            game.scenes!.active!.unsetFlag(ns, 'readyCheck');
+            game.scenes!.active!.unsetFlag(ns, 'readyCheckStatus');
+        }
+        this.active = false;
+        game.users!.forEach((player) => {
+            const elem = $(`#players-active i[data-user-id="${player.id}"]`);
+            if (elem.length === 0) return;
+            elem.removeClass('ccrc-ready fa-check fa-xmark ccrc-notready fa-xmark');
+        });
+    }
+
+    start(formData: any = {}, options: StartOptions = { save: true }) {
+        if (!game.scenes!.active) {
+            ui.notifications!.error('No active scene found. Ensure a scene is active and try again.');
+            return;
+        }
         this.emit('START', { formData });
         this.handleStart({ formData, options });
     }
@@ -62,6 +102,7 @@ export class RCManager {
     handleStart(payload: any = {}) {
         const newStatus: Record<string, boolean> = {};
         const { formData, options } = payload;
+        const { save } = options ?? {};
 
         game.users!.forEach((player) => {
             if (player.isGM) return;
@@ -69,6 +110,10 @@ export class RCManager {
             const elem = $(`#players-active i[data-user-id="${player.id}"]`);
             elem.removeClass('ccrc-ready fa-check fa-xmark').addClass('ccrc-notready fa-xmark');
         });
+        if (save && game.user!.isActiveGM) {
+            game.scenes!.active!.setFlag(ns, 'readyCheckStatus', newStatus);
+            game.scenes!.active!.setFlag(ns, 'readyCheck', true);
+        }
 
         this.timeStarted = new Date();
         this.previousRound = this.roundStarted;
@@ -78,6 +123,7 @@ export class RCManager {
         this.previousCombat = this.isCombat;
         this.formData = formData;
         this.readyStatus = newStatus;
+        this.active = true;
         if (game.combat) {
             this.isCombat = true;
             this.roundStarted = game.combat.round;
@@ -95,8 +141,6 @@ export class RCManager {
             this.isCombat = false;
             this.roundStarted = undefined;
         }
-        modLogger.log('asdf', this);
-
         const userElem = $(`#players-active i[data-user-id="${game.user!._id}"]`);
         if (formData['show-prompt'] && userElem.length > 0) {
             const userPrompt = new ApplicationCheckPrompt();
@@ -107,28 +151,47 @@ export class RCManager {
         }
     }
 
-    markReady(userId: string) {
+    markReady(userId: string, noSave = false) {
         this.emit('READY', { userId });
-        this.handleMarkReady({ userId });
+        this.handleMarkReady({ userId, noSave });
     }
 
-    handleMarkReady(payload: any) {
-        const { userId } = payload;
+    handleMarkReady(payload: any = { noSave: false }) {
+        modLogger.debug('handleMarkReady', payload);
+        const { userId, noSave, elem } = payload;
         this.readyStatus[userId] = true;
-        const elem = $(`#players-active i[data-user-id="${userId}"]`);
-        elem.removeClass('ccrc-notready fa-xmark').addClass('ccrc-ready fa-check');
+        const useElem = $(`#players-active i[data-user-id="${userId}"]`);
+        modLogger.log('useElem', useElem);
+        if (elem) {
+            elem.classList.remove('ccrc-notready', 'fa-xmark');
+            elem.classList.add('ccrc-ready', 'fa-check');
+        } else {
+            useElem?.removeClass('ccrc-notready fa-xmark');
+            useElem?.addClass('ccrc-ready fa-check');
+        }
+        // Only trigger save with self
+        if (!noSave && game.user!.isActiveGM) game.scenes!.active!.setFlag(ns, `readyCheckStatus.${userId}`, true);
     }
 
-    markUnready(userId: string) {
+    markUnready(userId: string, noSave = false) {
         this.emit('UNREADY', { userId });
-        this.handleMarkUnready({ userId });
+        this.handleMarkUnready({ userId, noSave });
     }
 
-    handleMarkUnready(payload: any) {
-        const { userId } = payload;
+    handleMarkUnready(payload: any = { noSave: false }) {
+        modLogger.debug('handleMarkUnready', payload);
+        const { userId, noSave, elem } = payload;
         this.readyStatus[userId] = false;
-        const elem = $(`#players-active i[data-user-id="${userId}"]`);
-        elem.removeClass('ccrc-ready fa-check').addClass('ccrc-notready fa-xmark');
+        const useElem = $(`#players-active i[data-user-id="${userId}"]`);
+        modLogger.log('useElem', elem, useElem);
+        if (elem) {
+            elem.classList.remove('ccrc-ready', 'fa-check');
+            elem.classList.add('ccrc-notready', 'fa-xmark');
+        } else {
+            useElem?.removeClass('ccrc-ready fa-check');
+            useElem?.addClass('ccrc-notready fa-xmark');
+        }
+        if (!noSave && game.user!.isActiveGM) game.scenes!.active!.setFlag(ns, `readyCheckStatus.${userId}`, false);
     }
 
     openCreate() {

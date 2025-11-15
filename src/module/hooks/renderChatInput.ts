@@ -1,5 +1,3 @@
-import { ApplicationNewCheck } from '#ccrc/module/applications/ApplicationNewCheck';
-
 export const renderChatInput = (app: any, elem: HTMLElement) => {
     const html = $(elem['#chat-controls']); // wrap
     const container = html.find('.control-buttons').first();
@@ -10,7 +8,7 @@ export const renderChatInput = (app: any, elem: HTMLElement) => {
     if (container.find(`#${id}`).length) return;
 
     const btn = $(
-        `<button type="button" id="${id}" class="ui-control icon fa-solid fa-check-double" data-tooltip="" aria-label="New Ready Check" data-action="newReadyCheck" style=""></button>`,
+        `<button type="button" id="${id}" class="ui-control icon fa-solid fa-list-check" data-tooltip="" aria-label="New Ready Check" data-action="newReadyCheck" style=""></button>`,
     );
 
     btn.on('click', (ev) => {
