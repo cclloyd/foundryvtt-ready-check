@@ -67,6 +67,6 @@
     },
     "dependencies": {},
     "imports": {
-        "#ke/*": "./src/*"
+        "#ccrc/*": "./src/*"
     }
 }

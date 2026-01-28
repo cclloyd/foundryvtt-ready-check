@@ -2,26 +2,9 @@
 import type { RCManager } from '#ccrc/module/lib/manager';
 
 declare global {
-    // Extend each game phase in fvtt-types
-    interface UninitializedGame {
-        readyCheck: RCManager;
-    }
-
-    interface InitGame {
-        readyCheck: RCManager;
-    }
-
-    interface I18nInitGame {
-        readyCheck: RCManager;
-    }
-
-    interface SetupGame {
-        readyCheck: RCManager;
-    }
-
-    interface ReadyGame {
-        readyCheck: RCManager;
-    }
+    var game: Game & {
+        readyCheck: RCManager,
+    };
 
     namespace ClientSettings {
         interface Values {
