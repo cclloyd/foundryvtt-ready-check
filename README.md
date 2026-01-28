@@ -1,26 +1,19 @@
-# Kineticist Enhancements for Pathfinder 1st Edition
+# Ready Check for FoundryVtt (v13+)
 
-This is a module for FoundryVTT that streamlines using the Kinetic Blast class feature of the Kineticist class in
-Pathfinder 1.
+This is a module for FoundryVTT that adds a simple ready check, useful for player/monster turn order combat.
 
 # Features:
--
 
-- Automatically apply burn
-- Automatically detect feats/class features on your sheet
-    - Requires the identifier to follow a specific standard
-        - feat: `feat_camelCase` (Be wary of exceptions in the compendium, such as `feat_twoweaponFighting`)
-        - class feature: `classFeat_camelCase`
-- Support for various feats/class features right out of the box (more on request, just open an issue!)
-- !NEW! Custom infusions/blasts/feats. See usage for more info.
+- Track ready check creation time and combat round
+- Can advance combat round when making checks
+- Show ready status in player panel.  Can update player status from that icon.
 
 # Screenshots
 
-| Actor Config Screen                                                                      | HUD for selected Kineticist token                                                       |
-|:-----------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------|
-| ![Infusions Config Screenshot](docs/screenshots/infusions.png?raw=true 'HUD screenshot') | ![HUD Screenshot](docs/screenshots/hud.png?raw=true 'HUD screenshot')                   |
-| Attack Screen                                                                            | Chat Card:                                                                              |
-| ![Attack Screenshot](docs/screenshots/blastattack.png?raw=true 'Attack screenshot')      | ![Chat Card Screenshot](docs/screenshots/blastcard.png?raw=true 'Chat Card screenshot') |
+![chat.png](docs/screenshots/chat.png) ![players.png](docs/screenshots/players.png)
+
+![dialog.png](docs/screenshots/dialog.png) ![player_dialog.png](docs/screenshots/player_dialog.png)
+
 
 # Installation
 
@@ -28,36 +21,14 @@ Install through the FoundryVTT admin interface.
 
 Manifest URL:
 
-- **Latest:** https://gitlab.com/api/v4/projects/29080072/packages/generic/permalink/latest/module.json
-- **Specific Version:** https://gitlab.com/api/v4/projects/29080072/packages/generic/permalink/v1.x.x/module.json
+- **Latest:** https://github.com/cclloyd/foundryvtt-ready-check/releases/download/latest/module.json
+- **Specific Version:** https://github.com/cclloyd/foundryvtt-ready-check/releases/download/v1.1.5/module.json
 
 # Usage
 
-## Getting Started
+Start a ready check using the icon that is added above the chat input box.
 
-- Select the kineticist's token, a menu should appear in the top left with 1 or 2 buttons.
-- Select 'KE Config' to bring up the actor config menu. From here you can check off all the blasts/infusions/etc you
-  have so that they will appear in the attack menu.
-- Hit save to confirm your changes.
-- Unselect then reselect your token. A new attack button should appear next to the config button.
-- Using this menu you can build your attack then fire it off. It provides some guides to help you manage resources.
-
-## Custom Abilities
-
-There is support for adding custom blasts, infusions, utility talents, metakinesis, and feats.
-
-To add a custom item:
-
-- Create a compendium of type `Item`
-- Go to settings > Configure Settings > Kineticist Enhancements for pf1e
-- Choose the newly created compendium for the custom items.
-- Go to add an item to the compendium of type `Feature` and subtype `Class Feature` or `Feat`.
-- Open `Sheet` in the top right of the newly created item and choose `Kineticist Talent` for the sheet type.
-- Fill out the talent as required. You will need to set a Name and ID for every talent. Other settings
-  depend on the talent type, and most aren't required. For burn, if an integer is input, it can be used to
-  automatically calculate your burn during the attack.
-- Add a transform if additional functionality is required that isn't provided.
-- Once you created and fill out a talent, it will be available to select in the actor config screen.
+Once a player closes their dialog, they can update their ready status again by clicking their icon in the player panel.
 
 # Development
 
@@ -77,5 +48,5 @@ To add a custom item:
 
 ## Prerequisites
 
-In order to build this module, recent versions of `node` (>= 16) and `yarn/npm` are
+In order to build this module, recent versions of `node` (>= 24) and `yarn/npm` are
 required. If you don't have `yarn`, but have `npm`, just run `npm install -g yarn` to install `yarn`.
